@@ -1,0 +1,130 @@
+body 
+{
+    padding: 10px;
+}
+
+.single_message_on_webpage
+{
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+}
+
+.flex-box
+{
+    display: flex;
+
+    // Or flex-flow: row wrap
+    flex-direction: column;
+    flex-wrap: wrap;
+
+    // // Extra Space
+    justify-content: space-evenly; // Horizontal
+    align-content: stretch; // Vertical
+
+    // Vertical (Default)
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.boxes-in-flexbox
+{   
+    margin-bottom: 1%;
+}
+
+.individual-comment
+{
+    border: 2px solid black;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    margin-left: 0.5%;
+    padding: 0.5%;
+    padding-right: 60%;
+    
+    font-family: 'Times New Roman', Times, serif;
+    font-size: medium;
+
+    // For every comment to be in their own row
+    text-align:left;
+    display: block;
+    float: left;
+}
+
+.button-margin-bottom
+{
+    margin-bottom: 1%;
+}
+
+.button-margin-top
+{
+    margin-top: 1%;
+}
+
+.responsive-listing-image
+{
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+}
+
+.responsive-listing-image-full
+{
+    text-align: center;
+
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+}
+
+.description-box
+{
+    border: 2px solid black;
+    margin-top: 0.5%;
+}
+
+.listing-price
+{
+    font-size: larger;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.listing-attributes
+{
+    font-size: 18px;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+}
+
+%listing-box
+{
+    text-align: left;
+    display: inline;
+    float: left;
+}
+
+.listing-box-img
+{
+    @extend %listing-box;
+    padding: 2%;
+}
+
+.listing-box-noimg
+{
+    @extend %listing-box;
+    padding-top: 3%;
+    padding-left: 3%;
+    padding-right: 2%;
+    padding-bottom: 3%;
+
+    font-weight: bold;
+
+}
+
+.whole-listing
+{
+    border: 2px solid black;
+    // Need to have Overflow Hidden to ensure the Border wraps around all the Child Divs
+    overflow: hidden;
+    margin-top: 0.5%;
+}

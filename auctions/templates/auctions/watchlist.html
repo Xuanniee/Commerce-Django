@@ -1,0 +1,39 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h1>{{ user }}'s Watchlist</h1>
+    {{ watchlist.listing }}
+    
+    {% if empty_watchlist %}
+    
+        <h6 class="single_message_on_webpage">Your Watchlist is currently empty. Watchlist listings you like to see them appear here!!</h6>
+
+    {% else %}
+
+        <!-- Print all the Listings in the User's Watchlist -->
+        {% for listing in listings %}
+            <div class="whole-listing">
+                <!-- If Condition to check if Image exists -->
+                {% if listing.auction_opt_img %}
+
+                <img src="{{ listing.auction_opt_img }}" alt="Listing Image" class="responsive-listing-image listing-box-img">
+
+                {% else %}
+
+                <span class="responsive-listing-image listing-box-noimg">No Image Provided</span>
+                
+                {% endif %}
+
+                <!-- Other Properties that is always displayed -->
+                <div class="listing-box">
+                    <!-- Passing in Template Values don't need Double Parenthesis as shown -->
+                    <h4><a href="{% url 'listing' listing.listing_id %}">{{ listing.auction_title }}</a></h3>
+                    <p><span class="listing-attributes">Price: $</span>{{ listing.auction_bid }}</p>
+                    <p><span class="listing-attributes">Details:</span>{{ listing.auction_description }}</p>
+                </div>
+            </div>
+        {% endfor %}
+
+    {% endif %}
+{% endblock %}
+

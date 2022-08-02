@@ -1,0 +1,45 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>New Auction</h2>
+    <form method="post" class="form-group">
+        {% csrf_token %}
+        <!-- Django Form consisting of 5 Fields -->
+        <div>
+            {{ form.title.label }}
+            {{ form.title }}
+        </div>
+        
+        <div>
+            <div>
+                {{ form.description.label }}
+            </div>
+            {{ form.description }}
+        </div>
+
+        <div>
+            <div>
+                {{ form.starting_bid.label }}
+            </div>
+            {{ form.starting_bid }}
+        </div>
+
+        <div>
+            <div>
+                {{ form.category.label }}
+            </div>
+            {{ form.category }}
+        </div>
+
+        <div>
+            <div>
+                {{ form.image_url.label }}
+            </div>
+            {{ form.image_url }}
+        </div>
+
+        <!-- Button to Create the Listing -->
+        <button type="submit" class="btn btn-secondary button-margin-top">List it!!</button>
+    </form>
+{% endblock %}
+

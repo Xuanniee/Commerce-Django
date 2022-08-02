@@ -1,0 +1,64 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <div>
+        <form method="post" action="{% url 'categories' %}">
+            {% csrf_token %}
+
+            <!-- If Loop to see if User wants all Categories or Filtered -->
+            {% if category %}
+
+                <!-- Check if Results of Filter is Empty -->
+                {% if empty_category %}
+
+                    <h6 class="single_message_on_webpage">There are currently no listings in this category. Sorry for the inconvenience incurred</h6>
+
+
+                {% else %}
+
+                    {% for listing in listings %}
+                        <!-- Listings -->
+                        <div class="whole-listing">
+                            <!-- If Condition to check if Image exists -->
+                            {% if listing.auction_opt_img %}
+            
+                            <img src="{{ listing.auction_opt_img }}" alt="Listing Image" class="responsive-listing-image listing-box-img">
+            
+                            {% else %}
+            
+                            <span class="responsive-listing-image listing-box-noimg">No Image Provided</span>
+                            
+                            {% endif %}
+            
+                            <!-- Other Properties that is always displayed -->
+                            <div class="listing-box">
+                                <!-- Passing in Template Values don't need Double Parenthesis as shown -->
+                                <h4><a href="{% url 'listing' listing.listing_id %}">{{ listing.auction_title }}</a></h3>
+                                <p><span class="listing-attributes">Price: $</span>{{ listing.auction_bid }}</p>
+                                <p><span class="listing-attributes">Details:</span>{{ listing.auction_description }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                {% endif %}
+
+            <!-- GET Request to see all the Categories -->
+            {% else %}
+                <!-- Flexbox to contain all the possible categories -->
+                <div class="flex-box">
+
+                    <!-- Loop through List of Tuple Categories -->
+                    {% for category in categories %}
+                        <!-- Index each Tuple to get the Word -->
+                        <button type="submit" class="btn btn-primary boxes-in-flexbox" name="filtered_category" value="{{ category.1 }}">{{ category.1 }}</button>
+                    {% endfor %}
+                
+                </div>
+
+            {% endif %}
+
+
+        </form>
+    </div>
+
+{% endblock %}

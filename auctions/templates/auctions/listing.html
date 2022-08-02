@@ -1,0 +1,143 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <!-- Heading for Title -->
+    <h1>Listing: {{ listing.auction_title }}</h1>
+
+    <!-- Watchlist Button -->
+    {% if user.is_authenticated %}
+        <form method="post" action="{% url 'watchlist' current_user.user_id %}">
+            {% csrf_token %}
+            
+            {% if in_watchlist %}
+                <input name="listing-id" type="hidden" value="{{ listing.listing_id }}">
+                <button type="submit" class="btn btn-primary buttom-margin-bottom" name="Remove_Watchlist_Button" value="Remove_Watchlist">Remove from Watchlist</button>    
+            {% else %}
+                <input name="listing-id" type="hidden" value="{{ listing.listing_id }}">
+                <button type="submit" class="btn btn-primary buttom-margin-bottom" name="Add_Watchlist_Button" value="Add_Watchlist">Add to Watchlist</button>
+            {% endif %}
+        </form>
+        
+    {% endif %}
+    
+    <!-- Other Listing Properties: Image and Description -->
+    <img src="{{ listing.auction_opt_img }}" alt="Listing Image" class="responsive-listing-image-full button-margin-top">
+    <div class="description-box">
+        <h6>Listing Details: </h6>
+        <p>{{ listing.auction_description }}</p>
+    </div>
+
+    <!-- Price -->
+    <span class="listing-price">Current Bid:  ${{ listing.auction_bid }}</span>
+    
+    <!-- Bid Details -->
+    <p>{{ bid_count }} bid(s) so far.</p>
+
+    <!-- If Loop for Authenticated Users -->
+    {% if user.is_authenticated %}
+
+        <!-- Close Auction -->
+        {% if listing.user == user %}
+
+            {% if listing.active == True %}
+                <!-- Allow Owner to Close Listing -->
+                <form method="post">
+                    {% csrf_token %}
+
+                    <button type="submit" class="btn btn-danger button-margin-top button-margin-bottom" value="End_Auction" name="End_Auction_Button">Close Auction</button>
+
+                </form>
+            {% endif %}
+
+        {% endif %}
+
+        <!-- Personalised Information for the Different Bidders -->
+        {% if user == highest_bidder  %}
+
+            <!-- For Auctions that have ended -->
+            {% if listing.active == False %}
+                <span class="btn btn-success">Congratulations!! You have won the auction!!</span>
+            {% else %}
+                <!-- Active Auctions -->
+                <p>The Current Bid is your Bid.</p>
+            {% endif %}
+        {% else %}
+
+            {% if listing.active == True %}
+                <!--  Active Auctions : Allow User to Bid -->
+                <p>The Current Bid is NOT your Bid.</p>>
+                <form id="bid_form" method="post" action="{% url 'listing' listing.listing_id %}">
+                    {% csrf_token %}
+
+                    <input autofocus autocomplete="off" class="form-control" placeholder="Bid" name="Bid-Value">
+
+                    <button type="submit" class="btn btn-secondary button-margin-top" name="Bid-Button" value="Bid">Place Bid</button>
+                </form>
+            
+            <!-- Inactive: Prevent People from Bidding -->
+            {% else %}
+                <!-- If Listing Owner, inform of end of auction -->
+                {% if user == listing.user %}
+                    <span class="btn btn-primary">Congratulations, you have ended the auction!!!</span>
+                <!-- Any othe User but Winner -->
+                {% else %}
+                    <span class="btn btn-danger">Unfortunately, someone else have won the auction.</span>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+
+    {% else %}
+        <!-- Inform Visitor they have to be logged in to Bid -->
+        <span> You are not logged in. You have to log in to be able to post comments and/or place bids for the auction!!!</span>
+    {% endif %}
+
+    <!-- Details about the Seller -->
+    <h3 class="button-margin-top">Details</h3>
+    <ul>
+        <li>Listed by: {{ listing.user }}</li>
+        <!-- If Loop for whether a Category was provided -->
+        {% if listing.auction_category %}
+            <li>Category: {{ listing.auction_category }}</li>
+        {% else %}
+            <li>Category: No Category Listed</li>
+        {% endif %}
+    </ul>
+    
+    <!-- Comments -->
+    <h3 class="button-margin-top">Comment Section</h3>
+
+     <!-- Comments from other Users -->
+     <div name="Comment-Section">
+        {% if listing_comments %}
+            <div name="User-Comment">
+                <!-- If Comments are Existing, Show them All -->
+                {% for comment in listing_comments %}
+                <div class="individual-comment">
+                    <h6><span>{{ comment.user }}</span> commented:</h6>
+                    <span>{{ comment.comment }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <!-- If No Comments, Inform the Visitor of this -->
+            <div>
+                <h6>There are currently no comments!!</h6>
+            </div>
+        {% endif %}
+    </div>
+
+    {% if user.is_authenticated %}
+        <!-- Only Allow Users to Post Comments -->
+        <form method="post" id="listing_comment_section">
+            <!-- Security Purposes-->
+            {% csrf_token %}
+
+            <!-- Comment Interface for Users-->
+            {{ comment_box.comment_area }}
+
+            <!-- Submit Button for Comment-->
+            <button type="submit" class="btn btn-secondary button-margin-top" name="Comment-Button" value="Comment">Submit Comment</button>
+        </form>
+    {% endif %}
+
+{% endblock %}
