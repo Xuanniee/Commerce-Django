@@ -65,7 +65,7 @@
 
             {% if listing.active == True %}
                 <!--  Active Auctions : Allow User to Bid -->
-                <p>The Current Bid is NOT your Bid.</p>>
+                <p>The Current Bid is NOT your Bid.</p>
                 <form id="bid_form" method="post" action="{% url 'listing' listing.listing_id %}">
                     {% csrf_token %}
 
